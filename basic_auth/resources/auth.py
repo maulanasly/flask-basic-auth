@@ -1,0 +1,47 @@
+from flask_restful import Resource, reqparse, marshal_with
+from flask_restful_swagger import swagger
+from basic_auth.schemes import Auth, UserAuth
+from basic_auth.models.users import get_user, get_session_by_id
+from basic_auth.exceptions import UnAuthorized
+
+auth_parser = reqparse.RequestParser()
+auth_parser.add_argument('username', type=str, required=True)
+auth_parser.add_argument('password', type=str, required=True)
+
+
+class AuthAPI(Resource):
+    """docstring for AuthAPI"""
+
+    @swagger.operation(
+        notes="""Retrieve list of events""",
+        parameters=[
+            {
+                "name": "payloads",
+                "description": "",
+                "required": True,
+                "allowMultiple": False,
+                "dataType": UserAuth.__name__,
+                "paramType": "body"
+            }
+        ],
+        responseClass=Auth.__name__,
+        responseMessages=[
+            {
+                "code": 200,
+                "message": "OK"
+            },
+        ]
+    )
+    @marshal_with(Auth.resource_fields)
+    def post(self):
+        args = auth_parser.parse_args()
+        username = args['username']
+        password = args['password']
+
+        user = get_user(username)
+        if user is not None:
+            if user.bcrypt_password == password:
+                session = get_session_by_id(user.user_id)
+        else:
+            return UnAuthorized
+        return {'session_id': session.session_id}, 200
