@@ -20,3 +20,30 @@ class UserAuth(object):
     }
 
     required = ['username', 'password']
+
+
+@swagger.model
+class User(object):
+    """docstring for User"""
+
+    resource_fields = {
+        'user_id': fields.String(),
+        'email': fields.String(),
+        'username': fields.String(),
+        'created_at': fields.DateTime()
+    }
+
+    required = ['email', 'username']
+
+
+@swagger.model
+@swagger.nested(
+    users=User.__name__)
+class UserList(object):
+    """docstring for ClassName"""
+
+    resource_fields = {
+        "users": fields.List(fields.Nested(User.resource_fields))
+    }
+
+    required = ['users']

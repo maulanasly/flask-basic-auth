@@ -21,9 +21,13 @@ db = SQLAlchemy(app)
 
 
 from basic_auth.resources.auth import AuthAPI
+from basic_auth.resources.users import UserListAPI, UserAPI, UserCreatingAPI
 
 
 api.add_resource(AuthAPI, '/login')
+api.add_resource(UserCreatingAPI, '/users')
+api.add_resource(UserAPI, '/users/<string:user_id>')
+api.add_resource(UserListAPI, '/users/list')
 
 
 @app.errorhandler(BaseExceptions)
