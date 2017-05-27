@@ -1,8 +1,9 @@
 from flask_restful import Resource, reqparse, marshal_with
 from flask_restful_swagger import swagger
 from basic_auth.schemes import Auth, UserAuth
-from basic_auth.models.users import get_user, get_session_by_id
+from basic_auth.models.users import get_user, get_session_by_id, generate_session, update_session
 from basic_auth.exceptions import UnAuthorized
+
 
 auth_parser = reqparse.RequestParser()
 auth_parser.add_argument('username', type=str, required=True)
@@ -42,6 +43,12 @@ class AuthAPI(Resource):
         if user is not None:
             if user.bcrypt_password == password:
                 session = get_session_by_id(user.user_id)
+                if session is None:
+                    session = generate_session(user.user_id)
+                if session.is_expired:
+                    session = update_session(user.user_id)
+            else:
+                return UnAuthorized
         else:
             return UnAuthorized
         return {'session_id': session.session_id}, 200

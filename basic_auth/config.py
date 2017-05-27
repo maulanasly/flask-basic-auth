@@ -7,6 +7,7 @@ class BaseConfig(object):
 
     SENTRY_DSN = ""
     SENTRY_RELEASE = "v0.1-rc1"
+    APP_SECRET = "basic_auth"
 
     SQLALCHEMY_DATABASE_URI = ''
 

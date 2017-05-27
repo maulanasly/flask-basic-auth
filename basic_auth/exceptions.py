@@ -1,3 +1,6 @@
+import json
+
+
 class BaseExceptions(Exception):
 
     extra = dict()
@@ -8,6 +11,18 @@ class BaseExceptions(Exception):
             if key in self.extra_fields:
                 self.extra[key] = value
 
+    @classmethod
+    def to_swagger(cls):
+        reason = {
+            "code": cls.code,
+            "reason": cls.message,
+            "extra_info": cls.extra_fields
+        }
+        return {
+            "code": cls.status_code,
+            "message": json.dumps(reason)
+        }
+
 
 class InvalidFileType(BaseExceptions):
     message = "Invalid file type"
@@ -16,16 +31,31 @@ class InvalidFileType(BaseExceptions):
     extra_fields = ['expected_type']
 
 
+class MissingSessionID(BaseException):
+    """docstring for MissingSessionID"""
+    message = "required session id"
+    code = 101
+    status_code = 400
+    extra_fields = ['message']
+
+
 class UnAuthorized(BaseExceptions):
     message = "UnAuthorized User"
-    code = 101
+    code = 102
     status_code = 401
     extra_fields = ['expected_type']
 
 
+class SessionExpired(BaseExceptions):
+    message = "session has expired"
+    code = 103
+    status_code = 401
+    extra_fields = ['message']
+
+
 class UserNotFound(BaseExceptions):
     message = "UnAuthorized User"
-    code = 102
+    code = 104
     status_code = 404
     extra_fields = ['message']
 

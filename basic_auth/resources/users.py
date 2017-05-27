@@ -4,7 +4,7 @@ from flask_restful_swagger import swagger
 from basic_auth.models.users import get_verified_users, create_user, get_user_by_id, delete_user_by_id
 from basic_auth.schemes import UserList, User
 from basic_auth.exceptions import InternalError, UserNotFound
-# from basic_auth.helpers.decorators import requires_auth
+from basic_auth.helpers.decorators import requires_auth
 
 get_user_parser = reqparse.RequestParser()
 get_user_parser.add_argument('verified', type=int, location='args')
@@ -26,10 +26,19 @@ get_single_user_parser.add_argument('user_id', type=int)
 
 class UserListAPI(Resource):
     """docstring for Users"""
+    decorators = [requires_auth]
 
     @swagger.operation(
         notes="""Retrieve list of users""",
         parameters=[
+            {
+                "name": "X-SESSION-ID",
+                "description": "",
+                "required": True,
+                "allowMultiple": False,
+                "dataType": "string",
+                "paramType": "header"
+            },
             {
                 "name": "verified",
                 "description": "",
@@ -55,7 +64,6 @@ class UserListAPI(Resource):
             },
         ]
     )
-    # @requires_auth
     @marshal_with(UserList.resource_fields)
     def get(self):
         args = get_user_parser.parse_args()
@@ -65,6 +73,7 @@ class UserListAPI(Resource):
 
 class UserCreatingAPI(Resource):
     """docstring for UserCreatingAPI"""
+
     @swagger.operation(
         notes="""Add user / registered new user""",
         parameters=[
@@ -100,10 +109,19 @@ class UserCreatingAPI(Resource):
 
 class UserAPI(Resource):
     """docstring for UserAPI"""
+    decorators = [requires_auth]
 
     @swagger.operation(
         notes="""Retrieve users by user_id""",
         parameters=[
+            {
+                "name": "X-SESSION-ID",
+                "description": "",
+                "required": True,
+                "allowMultiple": False,
+                "dataType": "string",
+                "paramType": "header"
+            },
             {
                 "name": "user_id",
                 "description": "",
@@ -121,7 +139,6 @@ class UserAPI(Resource):
             },
         ]
     )
-    # @requires_auth
     @marshal_with(User.resource_fields)
     def get(self, user_id=None):
         users = get_user_by_id(user_id)
@@ -132,6 +149,14 @@ class UserAPI(Resource):
     @swagger.operation(
         notes="""Delete users by user_id""",
         parameters=[
+            {
+                "name": "X-SESSION-ID",
+                "description": "",
+                "required": True,
+                "allowMultiple": False,
+                "dataType": "string",
+                "paramType": "header"
+            },
             {
                 "name": "user_id",
                 "description": "",
@@ -149,7 +174,6 @@ class UserAPI(Resource):
             },
         ]
     )
-    # @requires_auth
     @marshal_with(User.resource_fields)
     def delete(self, user_id=None):
         try:
@@ -162,6 +186,14 @@ class UserAPI(Resource):
     @swagger.operation(
         notes="""Update users by user_id""",
         parameters=[
+            {
+                "name": "X-SESSION-ID",
+                "description": "",
+                "required": True,
+                "allowMultiple": False,
+                "dataType": "string",
+                "paramType": "header"
+            },
             {
                 "name": "user_id",
                 "description": "",
@@ -187,7 +219,6 @@ class UserAPI(Resource):
             },
         ]
     )
-    # @requires_auth
     @marshal_with(User.resource_fields)
     def put(self, user_id):
         args = update_user_parser.parse_args()

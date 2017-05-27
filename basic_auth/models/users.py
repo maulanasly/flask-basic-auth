@@ -1,6 +1,10 @@
+from flask import current_app
 from basic_auth import db
 from sqlalchemy.exc import IntegrityError
 import sqlalchemy
+from datetime import datetime, timedelta
+
+import hmac
 
 
 class UserModel(db.Model):
@@ -70,7 +74,7 @@ def create_user(raw):
         return add_user.view()
     except IntegrityError:
         db.session.rollback()
-        return True
+        return None
 
 
 class SessionModel(db.Model):
@@ -81,9 +85,61 @@ class SessionModel(db.Model):
     session_id = db.Column(db.String(100), nullable=False)
     expired = db.Column(db.TIMESTAMP, nullable=True)
 
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
 
-def get_session_by_id(user_id):
+    def view(self):
+        return self.query.filter_by(user_id=self.user_id).first()
+
+    @property
+    def is_expired(self):
+        if self.expired > datetime.now():
+            return False
+        return True
+
+
+def get_session_by_user_id(user_id):
     return SessionModel.query.filter_by(user_id=user_id).first()
+
+
+def get_session_by_id(session_id):
+    return SessionModel.query.filter_by(session_id=session_id).first()
+
+
+def generate_session(user_id):
+    try:
+        expired = datetime.now() + timedelta(days=30)
+        session_id = generate_session_id(expired)
+        add_session = SessionModel()
+        add_session.user_id = user_id
+        add_session.session_id = session_id
+        add_session.expired = expired
+        db.session.add(add_session)
+        db.session.commit()
+        return add_session.view()
+    except IntegrityError:
+        db.session.rollback()
+        return None
+
+
+def update_session(user_id):
+    try:
+        expired = datetime.now() + timedelta(days=30)
+        session_id = generate_session_id(expired)
+        session = get_session_by_user_id(user_id)
+        session.session_id = session_id
+        session.expired = expired
+        session.save()
+        return session.view()
+    except IntegrityError:
+        db.session.rollback()
+        return None
+
+
+def generate_session_id(expired):
+    session_id = hmac.new(current_app.config.get('APP_SECRET'), expired.strftime('%Y-%m-%d %H:%m:%s'))
+    return session_id.digest().encode("hex")
 
 
 class UserRoleModel(db.Model):
