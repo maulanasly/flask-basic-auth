@@ -66,6 +66,7 @@ class UserListAPI(Resource):
     )
     @marshal_with(UserList.resource_fields)
     def get(self):
+        "get list user"
         args = get_user_parser.parse_args()
         users = get_verified_users(args.get('verified', 1), args.get('role_id', None))
         return {'users': users}
@@ -97,6 +98,7 @@ class UserCreatingAPI(Resource):
     # @requires_auth
     @marshal_with(User.resource_fields)
     def post(self):
+        "create user"
         args = create_user_parser.parse_args()
         user_data = {
             'username': args['username'],
@@ -141,6 +143,7 @@ class UserAPI(Resource):
     )
     @marshal_with(User.resource_fields)
     def get(self, user_id=None):
+        "get user by id"
         users = get_user_by_id(user_id)
         if users:
             return users.view()
@@ -176,6 +179,7 @@ class UserAPI(Resource):
     )
     @marshal_with(User.resource_fields)
     def delete(self, user_id=None):
+        "delete user by id"
         try:
             delete_user_by_id(user_id)
         except InternalError:
@@ -221,6 +225,7 @@ class UserAPI(Resource):
     )
     @marshal_with(User.resource_fields)
     def put(self, user_id):
+        "update user by id"
         args = update_user_parser.parse_args()
         user = get_user_by_id(user_id)
         if user is None:

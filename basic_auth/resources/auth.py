@@ -14,7 +14,7 @@ class AuthAPI(Resource):
     """docstring for AuthAPI"""
 
     @swagger.operation(
-        notes="""Retrieve list of events""",
+        notes="""User authentication method""",
         parameters=[
             {
                 "name": "payloads",
@@ -35,6 +35,7 @@ class AuthAPI(Resource):
     )
     @marshal_with(Auth.resource_fields)
     def post(self):
+        "authenticate user"
         args = auth_parser.parse_args()
         username = args['username']
         password = args['password']
