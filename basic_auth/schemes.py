@@ -23,6 +23,15 @@ class UserAuth(object):
 
 
 @swagger.model
+class OAuth2(object):
+
+    resource_fields = {
+        'user_info': fields.Raw()
+    }
+    required = []
+
+
+@swagger.model
 class User(object):
     """docstring for User"""
 

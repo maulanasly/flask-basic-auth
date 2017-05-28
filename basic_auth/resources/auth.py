@@ -1,9 +1,10 @@
+from flask import current_app
 from flask_restful import Resource, reqparse, marshal_with
 from flask_restful_swagger import swagger
-from basic_auth.schemes import Auth, UserAuth
-from basic_auth.models.users import get_user, get_session_by_id, generate_session, update_session
-from basic_auth.exceptions import UnAuthorized
-
+from basic_auth.schemes import Auth, UserAuth, OAuth2
+from basic_auth.models.users import get_user, get_session_by_user_id, generate_session, update_session
+from basic_auth.exceptions import UnAuthorized, InvalidGoogleAUTH
+from basic_auth import oauth
 
 auth_parser = reqparse.RequestParser()
 auth_parser.add_argument('username', type=str, required=True)
@@ -43,7 +44,7 @@ class AuthAPI(Resource):
         user = get_user(username)
         if user is not None:
             if user.bcrypt_password == password:
-                session = get_session_by_id(user.user_id)
+                session = get_session_by_user_id(user.user_id)
                 if session is None:
                     session = generate_session(user.user_id)
                 if session.is_expired:

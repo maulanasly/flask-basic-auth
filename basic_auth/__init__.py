@@ -4,6 +4,7 @@ from flask_restful_swagger import swagger
 from flask_sqlalchemy import SQLAlchemy
 from basic_auth.exceptions import BaseExceptions, SessionExpired, MissingSessionID
 from basic_auth.config import config
+from flask_oauthlib.client import OAuth
 
 
 import os
@@ -18,6 +19,7 @@ app.config.from_pyfile(config_file, silent=True)
 
 api = swagger.docs(Api(app), apiVersion='0.1', api_spec_url='/spec', description="basic authentications")
 db = SQLAlchemy(app)
+oauth = OAuth(app)
 
 
 from basic_auth.resources.auth import AuthAPI

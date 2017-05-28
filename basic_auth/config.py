@@ -10,10 +10,14 @@ class BaseConfig(object):
     APP_SECRET = "basic_auth"
 
     SQLALCHEMY_DATABASE_URI = ''
+    GOOGLE_ID = "cloud.google.com/console and get your ID"
+    GOOGLE_SECRET = "cloud.google.com/console and get the secret"
 
 
 class DevelopmentConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://basic_auth:eJTy5mn7shrHmU9c@localhost/basic_auth'
+    GOOGLE_ID = "898576985793-1oaem52t1huruq0k1s6hirvc91ulpm5k.apps.googleusercontent.com"
+    GOOGLE_SECRET = "dflBTM76uotZw6NZh0rhQP-z"
 
 
 class TestingConfig(BaseConfig):

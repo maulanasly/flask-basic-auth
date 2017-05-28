@@ -46,16 +46,23 @@ class UnAuthorized(BaseExceptions):
     extra_fields = ['expected_type']
 
 
+class InvalidGoogleAUTH(BaseExceptions):
+    message = "user is not valid"
+    code = 103
+    status_code = 401
+    extra_fields = ['expected_type']
+
+
 class SessionExpired(BaseExceptions):
     message = "session has expired"
-    code = 103
+    code = 104
     status_code = 401
     extra_fields = ['message']
 
 
 class UserNotFound(BaseExceptions):
     message = "UnAuthorized User"
-    code = 104
+    code = 105
     status_code = 404
     extra_fields = ['message']
 
