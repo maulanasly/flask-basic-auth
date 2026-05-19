@@ -138,8 +138,10 @@ def update_session(user_id):
 
 
 def generate_session_id(expired):
-    session_id = hmac.new(current_app.config.get('APP_SECRET'), expired.strftime('%Y-%m-%d %H:%m:%s'))
-    return session_id.digest().encode("hex")
+    secret = current_app.config.get('APP_SECRET').encode('utf-8')
+    payload = expired.strftime('%Y-%m-%d %H:%M:%S').encode('utf-8')
+    session_id = hmac.new(secret, payload, digestmod='sha256')
+    return session_id.hexdigest()
 
 
 class UserRoleModel(db.Model):

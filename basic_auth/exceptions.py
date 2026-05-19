@@ -7,7 +7,7 @@ class BaseExceptions(Exception):
 
     def __init__(self, **kwargs):
         super(BaseExceptions, self).__init__()
-        for (key, value) in kwargs.iteritems():
+        for (key, value) in kwargs.items():
             if key in self.extra_fields:
                 self.extra[key] = value
 
@@ -31,7 +31,7 @@ class InvalidFileType(BaseExceptions):
     extra_fields = ['expected_type']
 
 
-class MissingSessionID(BaseException):
+class MissingSessionID(BaseExceptions):
     """docstring for MissingSessionID"""
     message = "required session id"
     code = 101

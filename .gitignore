@@ -16,3 +16,4 @@ conf/*.json
 
 // Emacs
 *~
+.env

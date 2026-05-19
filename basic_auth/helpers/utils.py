@@ -1,11 +1,18 @@
 import requests
 import json
+# pyrefly: ignore [missing-import]
 import xlwt
 
 from time import sleep
 
-app_key = 'x73z3SCZz9RJpOW8JYogyvfuYMBV62N5'
-session_id = 'bb0f9bdc5e40152b260c289bf1a8850e'
+import os
+# pyrefly: ignore [missing-import]
+from dotenv import load_dotenv
+
+load_dotenv()
+
+app_key = os.getenv('SENSE_APP_KEY', '')
+session_id = os.getenv('SENSE_SESSION_ID', '')
 
 coaching_url = "https://coaching-api.sense-os.nl/v2"
 auth_url = "https://auth-api.sense-os.nl/v1"
@@ -58,7 +65,7 @@ if __name__ == '__main__':
     session_id = get_session_id("goalie+trial+helpdesk@sense-os.nl", "12341234").get('session_id', None)
     users = get_users(session_id)
     # for user in users:
-    print delete_users_by_id(session_id, 28015)
+    print(delete_users_by_id(session_id, 28015))
     sleep(1)
-    # print len(users)
+    # print(len(users))
 
