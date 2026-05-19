@@ -22,7 +22,9 @@ class BaseConfig(object):
 
 
 class DevelopmentConfig(BaseConfig):
-    pass
+    SQLALCHEMY_DATABASE_URI = os.getenv(
+        "SQLALCHEMY_DATABASE_URI", "sqlite:///basic_auth_dev.db"
+    )
 
 
 class TestingConfig(BaseConfig):
