@@ -1,5 +1,6 @@
 import requests
 import json
+# pyrefly: ignore [missing-import]
 import xlwt
 
 from time import sleep
@@ -58,7 +59,7 @@ if __name__ == '__main__':
     session_id = get_session_id("goalie+trial+helpdesk@sense-os.nl", "12341234").get('session_id', None)
     users = get_users(session_id)
     # for user in users:
-    print delete_users_by_id(session_id, 28015)
+    print(delete_users_by_id(session_id, 28015))
     sleep(1)
-    # print len(users)
+    # print(len(users))
 
