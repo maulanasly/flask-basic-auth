@@ -5,8 +5,13 @@ import xlwt
 
 from time import sleep
 
-app_key = 'x73z3SCZz9RJpOW8JYogyvfuYMBV62N5'
-session_id = 'bb0f9bdc5e40152b260c289bf1a8850e'
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+app_key = os.getenv('SENSE_APP_KEY', '')
+session_id = os.getenv('SENSE_SESSION_ID', '')
 
 coaching_url = "https://coaching-api.sense-os.nl/v2"
 auth_url = "https://auth-api.sense-os.nl/v1"

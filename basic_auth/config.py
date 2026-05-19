@@ -1,3 +1,10 @@
+import os
+# pyrefly: ignore [missing-import]
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
 class BaseConfig(object):
     ADMINS = []
     DEBUG = True
@@ -5,19 +12,17 @@ class BaseConfig(object):
     VERBOSE = False
     PROPAGATE_EXCEPTIONS = True
 
-    SENTRY_DSN = ""
-    SENTRY_RELEASE = "v0.1-rc1"
-    APP_SECRET = "basic_auth"
+    SENTRY_DSN = os.getenv("SENTRY_DSN", "")
+    SENTRY_RELEASE = os.getenv("SENTRY_RELEASE", "v0.1-rc1")
+    APP_SECRET = os.getenv("APP_SECRET", "basic_auth")
 
-    SQLALCHEMY_DATABASE_URI = ''
-    GOOGLE_ID = "cloud.google.com/console and get your ID"
-    GOOGLE_SECRET = "cloud.google.com/console and get the secret"
+    SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI", "")
+    GOOGLE_ID = os.getenv("GOOGLE_ID", "")
+    GOOGLE_SECRET = os.getenv("GOOGLE_SECRET", "")
 
 
 class DevelopmentConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://basic_auth:eJTy5mn7shrHmU9c@localhost/basic_auth'
-    GOOGLE_ID = "898576985793-1oaem52t1huruq0k1s6hirvc91ulpm5k.apps.googleusercontent.com"
-    GOOGLE_SECRET = "dflBTM76uotZw6NZh0rhQP-z"
+    pass
 
 
 class TestingConfig(BaseConfig):

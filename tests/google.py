@@ -7,9 +7,14 @@
 from flask import Flask, redirect, url_for, session, request, jsonify
 from flask_oauthlib.client import OAuth
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 app = Flask(__name__)
-app.config['GOOGLE_ID'] = "898576985793-1oaem52t1huruq0k1s6hirvc91ulpm5k.apps.googleusercontent.com"
-app.config['GOOGLE_SECRET'] = "dflBTM76uotZw6NZh0rhQP-z"
+app.config['GOOGLE_ID'] = os.getenv("GOOGLE_ID")
+app.config['GOOGLE_SECRET'] = os.getenv("GOOGLE_SECRET")
 app.debug = True
 app.secret_key = 'development'
 oauth = OAuth(app)
