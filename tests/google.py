@@ -4,10 +4,12 @@
     This example is contributed by Bruno Rocha
     GitHub: https://github.com/rochacbruno
 """
-from flask import Flask, redirect, url_for, session, request, jsonify
+from flask import (Flask, redirect, url_for, session, request, jsonify)
+# pyrefly: ignore [missing-import]
 from flask_oauthlib.client import OAuth
 
 import os
+# pyrefly: ignore [missing-import]
 from dotenv import load_dotenv
 
 load_dotenv()
